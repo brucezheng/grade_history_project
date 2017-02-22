@@ -19,20 +19,21 @@ def convert(in_file):
         else:
             semester = "Winter"
 
-        pattern = "([A-Z]{4})-([A-Z0-9]+)-([0-9]{3})[ ]+" + "([0-9]+)[ ]+" * 6 + "[0-9]+\.[0-9]+[ ]+" + "[0-9]+[ ]+" * 6 + "(.*)"
+        pattern = "([A-Z]{4})-([A-Z0-9]+)-([0-9]{3})[ ]+" + "([0-9]+)[ ]+" * 5 + "[0-9]+[ ]+" + "([0-9]+\.[0-9]+[ ]+)" + "[0-9]+[ ]+" * 3 + "([0-9]+)[ ]+" + "[0-9]+[ ]+" + "(.*)"
         print(pattern)
         regex = re.compile(pattern)
 
         out = ""
         csv_format = ','.join(map(lambda x: "{" + str(x) + "}", range(12)))
 
-        out += csv_format.format("Department", "Class", "Section", "Year", "Semester", "A", "B", "C", "D", "F", "Total", "Name") + '\n'
+        out += csv_format.format("Department", "Class", "Section", "Year", "Semester", "A", "B", "C", "D", "F", "GPR", "Q", "Total", "Name") + '\n'
 
         num_rows = 0
         for m in regex.finditer(input_string):
             num_rows += 1
             out += csv_format.format(m.group(1), m.group(2), m.group(3), year, semester,
-                                     m.group(4), m.group(5), m.group(6), m.group(7), m.group(8), m.group(9), re.sub("[ ]+"," ",m.group(10).strip())) + '\n'
+                                     m.group(4), m.group(5), m.group(6), m.group(7), m.group(8), 
+                                     m.group(9), m.group(10), m.group(11), re.sub("[ ]+"," ",m.group(11).strip())) + '\n'
 
         csv_name = in_file.replace(".txt",".csv")
         file = open("csv/" + csv_name, "w")
